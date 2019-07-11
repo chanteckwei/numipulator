@@ -10,7 +10,7 @@ setup(
     author_email='chan.tw97@gmail.com',
     description='Numpy-based image manipulation library.', install_requires=['numpy', 'scipy'],
     long_description='',
-    long_description_content_type='text',
+    long_description_content_type='text/markdown',
     classifiers=[
         'Programming Language :: Python :: 3'
     ]
