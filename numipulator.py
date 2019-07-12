@@ -5,10 +5,50 @@ import numpy as np
 import scipy.misc
 
 
+class NumipulatorError(Exception):
+    pass
+
+
+class InvalidColorSpaceError(NumipulatorError):
+    pass
+
+
 class NImage(object):
     def __init__(self) -> None:
         super().__init__()
         raise NotImplementedError("Don't call the constructor!")
+
+    @staticmethod
+    def add_alpha(image: np.ndarray) -> np.ndarray:
+        """Adds alpha channel to the image at the end of the color space.
+
+        :param image: Target image.
+        :return: Image with 4 color channels.
+        :raise InvalidColorSpaceError: Raised when the count of color space channels is invalid.
+        """
+        height, width, channels = image.shape
+        if channels == 3:
+            return np.dstack(image, np.zeros((height, width)))
+        elif channels == 4:
+            raise image[...]
+        else:
+            raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
+
+    @staticmethod
+    def remove_alpha(image: np.ndarray) -> np.ndarray:
+        """Removes alpha channel, assuming it's the last channel in 4-channel color space, from the image.
+
+        :param image: Target image.
+        :return: Image with 3 color channels.
+        :raise InvalidColorSpaceError: Raised when the count of color space channels is invalid.
+        """
+        height, width, channels = image.shape
+        if channels == 4:
+            return image[:, :, :3]
+        elif channels == 3:
+            return image[...]
+        else:
+            raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
 
     @staticmethod
     def fit_image(container: np.ndarray, image: np.ndarray) -> np.ndarray:
