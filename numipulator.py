@@ -2,7 +2,7 @@ __all__ = ['NImage']
 __version__ = '0.1.1'
 
 import numpy as np
-import scipy.misc
+from PIL import Image
 
 
 class NumipulatorError(Exception):
@@ -91,7 +91,7 @@ class NImage(object):
                 bottom: int = c_height
                 left: int = abs(c_width - i_width) // 2
                 right: int = left + i_width
-            container[top:bottom, left:right] = scipy.misc.imresize(image, (i_height, i_width))[...]
+            container[top:bottom, left:right] = np.array(Image.fromarray(image).resize((i_width, i_height)))[...]
         except ZeroDivisionError:
             pass
         return container
@@ -137,7 +137,7 @@ class NImage(object):
                 bottom: int = top + c_height
                 left: int = 0
                 right: int = c_width
-            container[...] = scipy.misc.imresize(image, (i_height, i_width))[top:bottom, left:right]
+            container[...] = np.array(Image.fromarray(image).resize((i_width, i_height)))[top:bottom, left:right]
         except ZeroDivisionError:
             pass
         return container

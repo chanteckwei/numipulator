@@ -8,7 +8,7 @@ setup(
     license='Apache License 2.0',
     author='Chan Teck Wei',
     author_email='chan.tw97@gmail.com',
-    description='Numpy-based image manipulation library.', install_requires=['numpy', 'scipy'],
+    description='Numpy-based image manipulation library.', install_requires=['numpy', 'Pillow'],
     long_description='',
     long_description_content_type='text/markdown',
     classifiers=[
