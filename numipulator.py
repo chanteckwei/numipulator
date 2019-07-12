@@ -67,9 +67,9 @@ class NImage(object):
         c_height, c_width, c_channels = container.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
-            image: np.ndarray = np.dstack(image, np.zeros((c_height, c_width)))
+            image: np.ndarray = NImage.add_alpha(image)
         elif c_channels == 3 and i_channels == 4:
-            image: np.ndarray = image[:, :, :3]
+            image: np.ndarray = NImage.remove_alpha(image)
         i_channels = image.shape[2]
         if c_channels != i_channels:
             raise RuntimeError("Channel count differs.")
@@ -113,9 +113,9 @@ class NImage(object):
         c_height, c_width, c_channels = container.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
-            image: np.ndarray = np.dstack(image, np.zeros((c_height, c_width)))
+            image: np.ndarray = NImage.add_alpha(image)
         elif c_channels == 3 and i_channels == 4:
-            image: np.ndarray = image[:, :, :3]
+            image: np.ndarray = NImage.remove_alpha(image)
         i_channels = image.shape[2]
         if c_channels != i_channels:
             raise RuntimeError("Channel count differs.")
