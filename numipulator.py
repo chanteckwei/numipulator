@@ -4,11 +4,14 @@ __version__ = '0.1.2'
 import numpy as np
 from PIL import Image
 
+
 class NumipulatorError(Exception):
     pass
 
+
 class InvalidColorSpaceError(NumipulatorError):
     pass
+
 
 class NImage:
     @staticmethod
