@@ -1,5 +1,5 @@
 __all__ = ['NImage']
-__version__ = '0.0.1'
+__version__ = '0.1.1'
 
 import numpy as np
 import scipy.misc
