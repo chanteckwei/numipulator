@@ -50,5 +50,5 @@ coverage.xml
 .idea/misc.xml
 .idea/workspace.xml
 .idea/modules.xml
-.idea/dictionaries.xml
+.idea/dictionaries
 .idea/caches
