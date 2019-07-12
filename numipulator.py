@@ -4,20 +4,13 @@ __version__ = '0.1.2'
 import numpy as np
 from PIL import Image
 
-
 class NumipulatorError(Exception):
     pass
-
 
 class InvalidColorSpaceError(NumipulatorError):
     pass
 
-
-class NImage(object):
-    def __init__(self) -> None:
-        super().__init__()
-        raise NotImplementedError("Don't call the constructor!")
-
+class NImage:
     @staticmethod
     def add_alpha(image: np.ndarray) -> np.ndarray:
         """Adds alpha channel to the image at the end of the color space.
