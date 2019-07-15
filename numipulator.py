@@ -59,7 +59,6 @@ class NImage:
         """
         # Check container's channel count.
         # Match image's channel count.
-        container: np.ndarray = container.copy()
         c_height, c_width, c_channels = container.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
@@ -105,7 +104,6 @@ class NImage:
         """
         # Check container's channel count.
         # Match image's channel count.
-        container: np.ndarray = container.copy()
         c_height, c_width, c_channels = container.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
