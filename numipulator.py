@@ -1,3 +1,5 @@
+from typing import Tuple, Optional
+
 __all__ = ['NImage']
 __version__ = '0.1.2'
 
@@ -47,7 +49,8 @@ class NImage:
             raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
 
     @staticmethod
-    def fit_image(background: np.ndarray, image: np.ndarray) -> np.ndarray:
+    def fit_image(background: np.ndarray, image: np.ndarray,
+                  background_fill: Optional[Tuple[int, ...]] = None) -> np.ndarray:
         """Fit an image at the center of the image background.
 
         The image's longest side is re-sized to match background's shortest side while maintaining the original aspect
@@ -55,10 +58,14 @@ class NImage:
 
         :param background: The image background.
         :param image: The image to be fitted.
+        :param background_fill: Optionally, specify a color tuple as background fill.
         :return: A containing image with fitted image.
         """
         # Check background's channel count.
         # Match image's channel count.
+        if background is not None:
+            background: np.ndarray = background.copy()
+            background[...] = background_fill[:min(background.shape[2], background_fill.__len__())]
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
@@ -92,7 +99,8 @@ class NImage:
         return background
 
     @staticmethod
-    def fill_image(background: np.ndarray, image: np.ndarray) -> np.ndarray:
+    def fill_image(background: np.ndarray, image: np.ndarray,
+                   background_fill: Optional[Tuple[int, ...]] = None) -> np.ndarray:
         """Fill an image at the center of the image background.
 
         The image's shortest side is re-sized to match background's shortest side while maintaining the original aspect
@@ -100,10 +108,14 @@ class NImage:
 
         :param background: The image background.
         :param image: The image to be filled onto background.
+        :param background_fill: Optionally, specify a color tuple as background fill.
         :return: A containing image with fitted image.
         """
         # Check background's channel count.
         # Match image's channel count.
+        if background is not None:
+            background: np.ndarray = background.copy()
+            background[...] = background_fill[:min(background.shape[2], background_fill.__len__())]
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
