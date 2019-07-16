@@ -1,7 +1,7 @@
 from typing import Tuple
 
 __all__ = ['NImage']
-__version__ = '0.1.2'
+__version__ = '0.2.0'
 
 import numpy as np
 from PIL import Image
