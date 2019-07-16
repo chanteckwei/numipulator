@@ -65,7 +65,8 @@ class NImage:
         # Match image's channel count.
         if background_fill is not None:
             background: np.ndarray = background.copy()
-            background[...] = background_fill[:min(background.shape[2], background_fill.__len__())]
+            fill_channels: int = min(background.shape[2], background_fill.__len__())
+            background[..., :fill_channels] = background_fill[:fill_channels]
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
@@ -115,7 +116,8 @@ class NImage:
         # Match image's channel count.
         if background_fill is not None:
             background: np.ndarray = background.copy()
-            background[...] = background_fill[:min(background.shape[2], background_fill.__len__())]
+            fill_channels: int = min(background.shape[2], background_fill.__len__())
+            background[..., :fill_channels] = background_fill[:fill_channels]
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
