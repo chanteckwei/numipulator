@@ -1,3 +1,5 @@
+from typing import Tuple
+
 __all__ = ['NImage']
 __version__ = '0.1.2'
 
@@ -29,6 +31,26 @@ class NImage:
             raise image[...]
         else:
             raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
+
+    @staticmethod
+    def add_border(image: np.ndarray, width: int, height: int, color: Tuple[int, ...] = None) -> np.ndarray:
+        """Add border to either axis' ends. Optionally, supply a color tuple as background fill.
+
+        Border will be visible if and only if the aspect ratio of the expected output is not equal to supplied
+        image's aspect ratio.
+
+        :param image: Target image.
+        :param width: Width of output image.
+        :param height: Height of output image.
+        :param color: Optionally, color of border.
+        :return: Image with border.
+        """
+        h, w, channels = image.shape
+        background: np.ndarray = np.zeros((height, width, channels), image.dtype)
+        if color is not None:
+            max_channels: int = min(channels, color.__len__())
+            background[..., :max_channels] = color[:max_channels]
+        return NImage.fit_image(background, image)
 
     @staticmethod
     def remove_alpha(image: np.ndarray) -> np.ndarray:
