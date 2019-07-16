@@ -1,3 +1,5 @@
+from typing import Tuple
+
 __all__ = ['NImage']
 __version__ = '0.1.2'
 
@@ -31,6 +33,26 @@ class NImage:
             raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
 
     @staticmethod
+    def add_border(image: np.ndarray, width: int, height: int, color: Tuple[int, ...] = None) -> np.ndarray:
+        """Add border to either axis' ends. Optionally, supply a color tuple as background fill.
+
+        Border will be visible if and only if the aspect ratio of the expected output is not equal to supplied
+        image's aspect ratio.
+
+        :param image: Target image.
+        :param width: Width of output image.
+        :param height: Height of output image.
+        :param color: Optionally, color of border.
+        :return: Image with border.
+        """
+        h, w, channels = image.shape
+        background: np.ndarray = np.zeros((height, width, channels), image.dtype)
+        if color is not None:
+            max_channels: int = min(channels, color.__len__())
+            background[..., :max_channels] = color[:max_channels]
+        return NImage.fit_image(background, image)
+
+    @staticmethod
     def remove_alpha(image: np.ndarray) -> np.ndarray:
         """Removes alpha channel, assuming it's the last channel in 4-channel color space, from the image.
 
@@ -47,20 +69,19 @@ class NImage:
             raise InvalidColorSpaceError("Image has {} color channels.".format(channels))
 
     @staticmethod
-    def fit_image(container: np.ndarray, image: np.ndarray) -> np.ndarray:
-        """Fit an image at the center of the image container.
+    def fit_image(background: np.ndarray, image: np.ndarray) -> np.ndarray:
+        """Fit an image at the center of the image background.
 
-        The image's longest side is re-sized to match container's shortest side while maintaining the original aspect
+        The image's longest side is re-sized to match background's shortest side while maintaining the original aspect
         ratio.
 
-        :param container: The image container.
+        :param background: The image background.
         :param image: The image to be fitted.
         :return: A containing image with fitted image.
         """
-        # Check container's channel count.
+        # Check background's channel count.
         # Match image's channel count.
-        container: np.ndarray = container.copy()
-        c_height, c_width, c_channels = container.shape
+        c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
             image: np.ndarray = NImage.add_alpha(image)
@@ -87,26 +108,25 @@ class NImage:
                 bottom: int = c_height
                 left: int = abs(c_width - i_width) // 2
                 right: int = left + i_width
-            container[top:bottom, left:right] = np.array(Image.fromarray(image).resize((i_width, i_height)))[...]
+            background[top:bottom, left:right] = np.array(Image.fromarray(image).resize((i_width, i_height)))[...]
         except ZeroDivisionError:
             pass
-        return container
+        return background
 
     @staticmethod
-    def fill_image(container: np.ndarray, image: np.ndarray) -> np.ndarray:
-        """Fill an image at the center of the image container.
+    def fill_image(background: np.ndarray, image: np.ndarray) -> np.ndarray:
+        """Fill an image at the center of the image background.
 
-        The image's shortest side is re-sized to match container's shortest side while maintaining the original aspect
+        The image's shortest side is re-sized to match background's shortest side while maintaining the original aspect
         ratio.
 
-        :param container: The image container.
-        :param image: The image to be filled onto container.
+        :param background: The image background.
+        :param image: The image to be filled onto background.
         :return: A containing image with fitted image.
         """
-        # Check container's channel count.
+        # Check background's channel count.
         # Match image's channel count.
-        container: np.ndarray = container.copy()
-        c_height, c_width, c_channels = container.shape
+        c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
             image: np.ndarray = NImage.add_alpha(image)
@@ -133,7 +153,7 @@ class NImage:
                 bottom: int = top + c_height
                 left: int = 0
                 right: int = c_width
-            container[...] = np.array(Image.fromarray(image).resize((i_width, i_height)))[top:bottom, left:right]
+            background[...] = np.array(Image.fromarray(image).resize((i_width, i_height)))[top:bottom, left:right]
         except ZeroDivisionError:
             pass
-        return container
+        return background
