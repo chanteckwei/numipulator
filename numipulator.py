@@ -59,7 +59,6 @@ class NImage:
         """
         # Check background's channel count.
         # Match image's channel count.
-        background: np.ndarray = background.copy()
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
@@ -105,7 +104,6 @@ class NImage:
         """
         # Check background's channel count.
         # Match image's channel count.
-        background: np.ndarray = background.copy()
         c_height, c_width, c_channels = background.shape
         i_height, i_width, i_channels = image.shape
         if c_channels == 4 and i_channels == 3:
