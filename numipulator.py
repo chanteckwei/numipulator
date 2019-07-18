@@ -26,7 +26,9 @@ class NImage:
         """
         height, width, channels = image.shape
         if channels == 3:
-            return np.dstack(image, np.zeros((height, width)))
+            alpha = np.zeros((height, width), image.dtype)
+            alpha[...] = (255,)
+            return np.dstack((image, alpha))
         elif channels == 4:
             raise image[...]
         else:
